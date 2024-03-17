@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính toán suất chiếu</title>
+    <style>
+        #root {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 1rem;
+        }
+        .options input {
+            appearance: none;
+        }
+        .options label {
+            padding: 0.5rem 1rem;
+            border: 0.5px solid #333;
+            color: #333;
+            cursor: pointer;
+        }
+        .options input:checked ~ label {
+            background-color: #008915;
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        
+        function render(sets, domId = 'root') {
+            const dom = document.getElementById(domId);
+
+            sets.forEach((item, index) => {
+                dom.innerHTML += `
+                    <div class='options'>
+                        <input id='id-${index}' type='checkbox' />
+                        <label for='id-${index}'>
+                            ${item.getString()}
+                        </label>
+                    </div>
+                `;
+            });
+        }
+
+        // viết hàm lấy thời gian trong ngày
+        function getAfterTime(startDateTime, timeInMinute) {
+            const miliseconds = timeInMinute * 60 * 1000;
+            const result = new Date(startDateTime.getTime() + miliseconds);
+
+            return {
+                date: result,
+                getString() {
+                    return result.toTimeString().slice(0, 5);
+                }
+            }
+        }
+
+        function getXuatChieus(date = new Date(), time = 60) {
+            const initTime = 7;
+            date = new Date(date.setHours(initTime));
+            date.setMinutes(0);
+            let current = {
+                date
+            };
+
+            const sets = [ // giá trị khởi tạo
+                {
+                    ...current,
+                    getString() { return `0${initTime}:00`; }
+                }
+            ];
+
+            while(current.date.getHours() < 23) { // vãn còn trong ngày
+                current = getAfterTime(current.date, time);
+                sets.push(current);
+            }
+            return sets;
+        }
+
+        const sets = getXuatChieus(new Date(), 135);
+
+        render(sets);
+    </script>
+</body>
+</html>

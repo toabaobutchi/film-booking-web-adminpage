@@ -1,18 +1,16 @@
 const express = require('express')
-const user = require('./models/User')
+const route = require('./routes')
+const svConfig = require('./configs/server.config')
 
 const app = express()
-const port = 3000
+const port = 3001
 
-// route
-app.get('/', async (req, res) => {
-    try {
-        const [result] = await user.getUsers()
-        res.json(result)
-    }
-    catch (err) {
-        res.send(err);
-    }
+svConfig.config(app)
+
+app.get('/', (req, res) => {
+    res.send('Welcome to my API');
 })
+// routes
+app.use('/api/v1/admin', route)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
