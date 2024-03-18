@@ -7,9 +7,16 @@ class Film {
             return con.query('SELECT * FROM phim');
         }
         catch(err) {
-            return new Promise((resolve, reject) => {
-                reject([['Error at Film::getFilms()'], {}])
-            })
+            return Promise.resolve([null, null])
+        }
+    }
+
+    async createFilm(filmData) {
+        try {
+            
+        }
+        catch (err) {
+            
         }
     }
 }
