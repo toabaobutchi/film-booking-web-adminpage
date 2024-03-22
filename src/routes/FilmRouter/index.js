@@ -1,30 +1,23 @@
 const express = require('express')
 const route = express.Router()
-const filmModel = require('../../models/Film')
-
+const filmController = require('../../controllers/FilmController')
+// const multer = require('multer')
+// const upload = multer({ dest: './src/uploads/' })
+const upload = require('../../configs/upload')
 
 // GET /api/v1/admin/films
-// get all films
-route.get('/', async (req, res) => { 
-    try {
-        const [result] = await filmModel.getFilms()
-        res.json(result);
-    }
-    catch(err) {
-        console.log("Error\'s thrown at { FilmRoute/index.js/route.get(\'/\') }: ", err)
-    }
-})
+route.get('/', filmController.index)
 
 // POST /api/v1/admin/films
-route.post('/', async (req, res) => {
-    try {
-        const data = req.body
-        
-    }
-    catch (err) {
-        
-    }
-    
-})
+route.post('/', upload.single("poster"), filmController.create)
+
+// PUT /api/v1/admin/films
+route.put('/:id', filmController.update)
+
+// PUT /api/v1/admin/films/{id}
+route.delete('/:id', filmController.delete)
+
+// GET /api/v1/admin/films/{id}
+route.get('/:id', filmController.find)
 
 module.exports = route
