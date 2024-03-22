@@ -34,7 +34,6 @@ class FilmController {
     // PUT: /api/v1/admin/films/
     async update(req, res) {
         try {
-
             const clientData = req.body
 
             const [result] = filmModel.updateFilm(clientData);
