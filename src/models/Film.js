@@ -34,12 +34,11 @@ class Film {
             return Promise.resolve([null, null])
         }
     }
-    async updateFilm(data) {
+    async updateFilm(id, data) {
         try {
             const sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, poster = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
             const con = await db.connect()
-            let values = binder.filmBinder(data)
-            values.push(data.id)
+            let values = binder.filmBinder(data).push(id)
             return con.execute(sql, values)
         }
         catch (err) {

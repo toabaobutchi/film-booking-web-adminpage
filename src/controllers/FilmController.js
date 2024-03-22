@@ -14,7 +14,8 @@ class FilmController {
             }
         }
         catch (err) {
-            res.status(400).json([])
+            console.log(err);
+            res.status(500)
         }
     }
 
@@ -27,21 +28,22 @@ class FilmController {
             return res.json(result.affectedRows)
         }
         catch (err) {
-            return res.json(-1)
+            console.log(err);
+            return res.status(500)
         }
     }
 
-    // PUT: /api/v1/admin/films/
+    // PUT: /api/v1/admin/films/{id}
     async update(req, res) {
         try {
             const clientData = req.body
-
-            const [result] = filmModel.updateFilm(clientData);
+            const id = req.params.id
+            
+            const [result] = filmModel.updateFilm(id, clientData);
             res.json(result.affectedRows)
-
         }
         catch (err) {
-            res.status(400).json(-1)
+            res.status(500)
         }
     }
 
@@ -49,7 +51,7 @@ class FilmController {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.json(0)
+            if (!id) res.status(404)
             else {
                 const [result] = await filmModel.deleteFilm(id);
                 res.json(result.affectedRows)
@@ -57,7 +59,7 @@ class FilmController {
         }
         catch (err) {
             console.log(err);
-            res.status(400).json(-1)
+            res.status(500)
         }
     }
 
@@ -66,7 +68,7 @@ class FilmController {
         try {
 
             const id = req.params.id
-            if (!id) res.json({})
+            if (!id) res.status(404)
             else {
                 const [result] = await filmModel.find(id);
                 res.json(result)
@@ -74,7 +76,7 @@ class FilmController {
         }
         catch (err) {
             console.log(err)
-            res.status(400).json({})
+            res.status(500)
         }
     }
 }

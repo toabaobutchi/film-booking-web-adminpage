@@ -1,9 +1,9 @@
 const express = require('express')
 const route = express.Router()
-const filmController = require('../../controllers/FilmController')
+const filmController = require('../controllers/FilmController')
 // const multer = require('multer')
 // const upload = multer({ dest: './src/uploads/' })
-const upload = require('../../configs/upload')
+const upload = require('../configs/upload')
 
 // GET /api/v1/admin/films
 route.get('/', filmController.index)

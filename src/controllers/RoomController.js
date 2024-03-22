@@ -24,18 +24,15 @@ class Room {
         }
     }
 
-    // PUT: /api/v1/admin/films/
+    // PUT: /api/v1/admin/films/{id}
     async update(req, res) {
         try {
-
             const clientData = req.body
-
             const [result] = roomModel.updateFilm(clientData);
             res.json(result.affectedRows)
-
         }
         catch (err) {
-            res.status(400).json(-1)
+            res.status(500).json(-1)
         }
     }
 
@@ -43,7 +40,7 @@ class Room {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.json(0)
+            if (!id) res.status(404)
             else {
                 const [result] = await roomModel.deleteFilm(id);
                 res.json(result.affectedRows)
@@ -51,7 +48,7 @@ class Room {
         }
         catch (err) {
             console.log(err);
-            res.status(400).json(-1)
+            res.status(500)
         }
     }
 
@@ -60,14 +57,15 @@ class Room {
         try {
 
             const id = req.param.id
-            if (!id) res.json({})
+            if (!id) res.status(404)
             else {
                 const [result] = roomModel.find(id);
                 res.json(result)
             }
         }
         catch (err) {
-            res.status(400).json({})
+            console.log(err)
+            res.status(500)
         }
     }
 }

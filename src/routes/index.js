@@ -9,4 +9,4 @@ route.use('/films', filmRouter)
 route.use('/rooms', roomRouter)
 route.use('/categories', categoryRouter)
 
-module.exports = route 
+module.exports = route
