@@ -10,7 +10,10 @@ class FilmController {
             }
             else {
                 const [result] = await filmModel.searchByName(query)
-                res.json(result);
+                if (result === null) {
+                    res.status(500).send('No connection')
+                }
+                else res.json(result);
             }
         }
         catch (err) {
@@ -25,11 +28,14 @@ class FilmController {
             const clientData = req.body
             clientData.poster = req.file.filename
             const [result] = await filmModel.createFilm(clientData)
-            return res.json(result.affectedRows)
+            if (result === null) {
+                res.status(500).send('No connection')
+            }
+            else res.json(result.affectedRows)
         }
         catch (err) {
             console.log(err);
-            return res.status(500)
+            res.status(500)
         }
     }
 
@@ -38,11 +44,20 @@ class FilmController {
         try {
             const clientData = req.body
             const id = req.params.id
-            
-            const [result] = filmModel.updateFilm(id, clientData);
-            res.json(result.affectedRows)
+            clientData.poster = req.file?.filename ?? ''
+            if (!id) {
+                res.status(400).send('No params')
+            }
+            else {
+                const [result] = await filmModel.updateFilm(id, clientData);
+                if (result === null) {
+                    res.status(500).send('No connection')
+                }
+                else res.json(result.affectedRows)
+            }
         }
         catch (err) {
+            console.log(err)
             res.status(500)
         }
     }
@@ -51,10 +66,13 @@ class FilmController {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.status(404)
+            if (!id) res.status(400).send('No params')
             else {
                 const [result] = await filmModel.deleteFilm(id);
-                res.json(result.affectedRows)
+                if (result === null) {
+                    res.status(500).send('No connection')
+                }
+                else res.json(result.affectedRows)
             }
         }
         catch (err) {
@@ -66,12 +84,16 @@ class FilmController {
     // GET: /api/v1/admin/films/:id
     async find(req, res) {
         try {
-
             const id = req.params.id
-            if (!id) res.status(404)
+            if (!id) {
+                res.status(400).send('No params')
+            }
             else {
                 const [result] = await filmModel.find(id);
-                res.json(result)
+                if (result === null) {
+                    res.status(500).send('No connection')
+                }
+                else res.json(result)
             }
         }
         catch (err) {

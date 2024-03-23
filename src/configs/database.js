@@ -18,5 +18,4 @@ const connect = async () => {
     return connection;
 }
 
-
 module.exports = { connect }

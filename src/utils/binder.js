@@ -1,4 +1,4 @@
-function filmBinder(data, defaultValues = ['', '', Date.now(), 0, '', '', null, '', '', null]) {
+function filmBinder(data) {
     const { name, director, launchdate, time, description, poster, finishtime, actors, rated, categoryid } = data
     return [name, director, launchdate, time, description, poster, finishtime, actors, rated, categoryid];
 }

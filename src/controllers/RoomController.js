@@ -32,7 +32,8 @@ class Room {
             res.json(result.affectedRows)
         }
         catch (err) {
-            res.status(500).json(-1)
+            console.log(err);
+            res.status(500)
         }
     }
 
@@ -55,7 +56,6 @@ class Room {
     // GET: /api/v1/admin/films/:id
     async find(req, res) {
         try {
-
             const id = req.param.id
             if (!id) res.status(404)
             else {

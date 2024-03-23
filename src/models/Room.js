@@ -1,4 +1,4 @@
-import db from '../configs/database'
+const db = require('../configs/database')
 
 class Room {
     async getRooms() {

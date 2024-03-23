@@ -1,6 +1,7 @@
 const db = require('../configs/database')
 const binder = require('../utils/binder')
 
+
 class Film {
     async getFilms() {
         try {
@@ -8,6 +9,7 @@ class Film {
             return con.query('SELECT * FROM film');
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/getFilms >>>", err)
             return Promise.resolve([null, null])
         }
     }
@@ -20,28 +22,42 @@ class Film {
             return con.execute(sql, values)
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/createFilm >>>", err)
             return Promise.resolve([null, null])
         }
     }
     async deleteFilm(id) {
         try {
-            console.log(id)
             const sql = 'DELETE FROM film WHERE id = ?'
             const con = await db.connect()
             return con.execute(sql, [id])
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/deleteFilm >>>", err)
             return Promise.resolve([null, null])
         }
     }
     async updateFilm(id, data) {
         try {
-            const sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, poster = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
+            let sql = ''
+
+            // có file gửi đến thì cập nhật, ko thì giữ nguyên
+            if (data.poster) {
+                sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, poster = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
+            }
+            else {
+                sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
+            }
             const con = await db.connect()
-            let values = binder.filmBinder(data).push(id)
+            let values = binder.filmBinder(data)
+            values.push(id)
+            if (!data.poster) {
+                values.splice(5, 1) // bỏ giá trị của poster ra
+            }
             return con.execute(sql, values)
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/updateFilm >>>", err)
             return Promise.resolve([null, null])
         }
     }
@@ -53,6 +69,7 @@ class Film {
             return [result[0], field]
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/find >>>", err)
             return Promise.resolve([null, null])
         }
     }
@@ -64,10 +81,10 @@ class Film {
             return con.execute(sql, [`%${query}%`])
         }
         catch (err) {
+            console.log("Error log from >>> models/Film/searchByName >>>", err)
             return Promise.resolve([null, null])
         }
     }
 }
 
 module.exports = new Film()
-
