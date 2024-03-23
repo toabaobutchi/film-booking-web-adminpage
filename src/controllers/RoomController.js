@@ -5,22 +5,32 @@ class Room {
     async index(req, res) {
         try {
             const [result] = await roomModel.getRooms()
-            res.json(result);
-        }
-        catch (err) {
-            res.status(400)
+            if (result === null) {
+                res.status(500).send('No connection')
+            } else res.json(result)
+        } catch (err) {
+            console.log(err)
+            res.status(500)
         }
     }
 
     // POST: /api/v1/admin/films
     async create(req, res) {
         try {
+            // const contentType = req.headers['content-type']
+            // console.log('Content-Type:', contentType)
+            
             const clientData = req.body
+
+            // console.log("Data", clientData) // TEST
+
             const [result] = await roomModel.createRoom(clientData)
-            return res.json(result.affectedRows)
-        }
-        catch (err) {
-            return res.json(-1)
+            if (result === null) {
+                res.status(500).send('No connection')
+            } else return res.json(result.affectedRows)
+        } catch (err) {
+            console.log(err)
+            return res.status(500)
         }
     }
 
@@ -28,11 +38,17 @@ class Room {
     async update(req, res) {
         try {
             const clientData = req.body
-            const [result] = roomModel.updateFilm(clientData);
-            res.json(result.affectedRows)
-        }
-        catch (err) {
-            console.log(err);
+            const id = req.params.id
+            if (!id) {
+                res.status(400).send('No params')
+            } else {
+                const [result] = await roomModel.updateFilm(id, clientData)
+                if (result === null) {
+                    res.status(500).send('No connection')
+                } else res.json(result.affectedRows)
+            }
+        } catch (err) {
+            console.log(err)
             res.status(500)
         }
     }
@@ -41,14 +57,15 @@ class Room {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.status(404)
+            if (!id) res.status(400).send('No params')
             else {
-                const [result] = await roomModel.deleteFilm(id);
-                res.json(result.affectedRows)
+                const [result] = await roomModel.deleteFilm(id)
+                if (result === null) {
+                    res.status(500).send('No connection')
+                } else res.json(result.affectedRows)
             }
-        }
-        catch (err) {
-            console.log(err);
+        } catch (err) {
+            console.log(err)
             res.status(500)
         }
     }
@@ -56,14 +73,15 @@ class Room {
     // GET: /api/v1/admin/films/:id
     async find(req, res) {
         try {
-            const id = req.param.id
-            if (!id) res.status(404)
+            const id = req.params.id
+            if (!id) res.status(400).send('No params')
             else {
-                const [result] = roomModel.find(id);
-                res.json(result)
+                const [result] = await roomModel.find(id)
+                if (result === null) {
+                    res.status(500).send('No connection')
+                } else res.json(result)
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err)
             res.status(500)
         }

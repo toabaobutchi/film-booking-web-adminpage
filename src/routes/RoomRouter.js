@@ -17,4 +17,4 @@ route.delete('/:id', roomController.delete)
 // GET: /api/v1/admin/rooms/{id}
 route.get('/:id', roomController.find)
 
-module.exports = route;
+module.exports = route
