@@ -17,13 +17,7 @@ class Room {
     // POST: /api/v1/admin/films
     async create(req, res) {
         try {
-            // const contentType = req.headers['content-type']
-            // console.log('Content-Type:', contentType)
-            
             const clientData = req.body
-
-            // console.log("Data", clientData) // TEST
-
             const [result] = await roomModel.createRoom(clientData)
             if (result === null) {
                 res.status(500).send('No connection')
