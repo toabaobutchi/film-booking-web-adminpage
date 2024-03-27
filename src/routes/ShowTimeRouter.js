@@ -10,4 +10,6 @@ route.get('/films/:filmId', showTimeController.index)
 // GET: /api/v1/admin/show-time/rooms/{roomId}
 route.get('/rooms/:roomId', showTimeController.getForRoom)
 
+route.post('/', showTimeController.addShowtime)
+
 module.exports = route

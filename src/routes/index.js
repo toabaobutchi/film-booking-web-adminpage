@@ -8,6 +8,6 @@ const route = express.Router()
 route.use('/films', filmRouter)
 route.use('/rooms', roomRouter)
 route.use('/categories', categoryRouter)
-route.use('/show-time', showTimeRouter)
+route.use('/show-times', showTimeRouter)
 
 module.exports = route

@@ -31,6 +31,18 @@ class ShowTimeController {
             res.status(500)
         }
     }
+
+    async addShowtime(req, res) {
+        try {
+            const data = req.body
+            const [result] = await showTimeModel.addShowtime(data.room_id, data.film_id, data.showtimes)
+            res.json(result.affectedRows)
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500)
+        }
+    }
 }
 
 module.exports = new ShowTimeController()
