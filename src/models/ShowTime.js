@@ -1,4 +1,3 @@
-const db = require('../configs/database')
 const binder = require('../utils/binder')
 const Model = require('./Model')
 

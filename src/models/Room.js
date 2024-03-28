@@ -1,6 +1,5 @@
 const Model = require('./Model')
 
-
 class Room extends Model {
     constructor() {
         super()
