@@ -1,10 +1,14 @@
-const db = require('../configs/database')
+const Model = require('./Model')
 
-class Room {
+
+class Room extends Model {
+    constructor() {
+        super()
+    }
     async getRooms() {
         try {
-            const con = await db.connect()
-            return con.query('SELECT * FROM room')
+            await this.connect()
+            return this.connection.query('SELECT * FROM room')
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])
@@ -13,10 +17,10 @@ class Room {
 
     async createRoom(data) {
         try {
-            const con = await db.connect()
+            await this.connect()
             const sql = 'INSERT INTO room(name, seats) VALUES(?, ?)'
             const values = [data.name, data.seats]
-            return con.execute(sql, values)
+            return this.connection.execute(sql, values)
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])
@@ -24,10 +28,10 @@ class Room {
     }
     async deleteRoom(id) {
         try {
-            const con = await db.connect()
+            await this.connect()
             const sql = 'DELETE FROM room WHERE id = ?'
             const values = [id]
-            return con.execute(sql, values)
+            return this.connection.execute(sql, values)
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])
@@ -35,10 +39,10 @@ class Room {
     }
     async updateRoom(id, data) {
         try {
-            const con = await db.connect()
+            await this.connect()
             const sql = 'UPDATE room SET name = ?, seats = ? WHERE id = ?'
             const values = [data.name, data.seats, id]
-            return con.execute(sql, values)
+            return this.connection.execute(sql, values)
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])
@@ -46,9 +50,9 @@ class Room {
     }
     async find(id) {
         try {
-            const con = await db.connect()
+            await this.connect()
             const sql = 'DELETE FROM room WHERE id = ?'
-            const [result, field] = await con.execute(sql, [id])
+            const [result, field] = await this.connection.execute(sql, [id])
             return [result[0], field]
         } catch (err) {
             console.log(err)
