@@ -1,5 +1,5 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+require('dotenv').config()
+const mysql = require('mysql2/promise')
 
 const connect = async () => {
     let connection = await mysql.createPool({
@@ -15,7 +15,7 @@ const connect = async () => {
         enableKeepAlive: true,
         keepAliveInitialDelay: 0,
     })
-    return connection;
+    return connection
 }
 
 module.exports = { connect }

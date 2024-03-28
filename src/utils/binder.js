@@ -5,12 +5,7 @@ function filmBinder(data) {
 
 function showTimeBinder(roomId, filmId, showTimes = []) {
     const data = showTimes.map((s) => {
-        return [
-            roomId,
-            filmId,
-            s.time,
-            s.price
-        ]
+        return [roomId, filmId, s.time, s.price]
     })
     return data
 }
