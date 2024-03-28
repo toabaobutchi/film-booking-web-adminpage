@@ -24,8 +24,6 @@ class ShowTimeController {
                 res.status(400).send('No params')
             } else {
                 const [result] = await showTimeModel.getShowTimesForRoom(roomId)
-                // const data = result.map(item => ({...item, stime: new Date(item.stime)}))
-                console.log(result);
                 res.json(result)
             }
         } catch (err) {
