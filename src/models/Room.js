@@ -7,7 +7,7 @@ class Room extends Model {
     async getRooms() {
         try {
             await this.connect()
-            return this.connection.query('SELECT * FROM room')
+            return this.connection.query('select r.id, r.name, r.seats, count(s.id) as showtime_count from room r left join showtime s on  r.id = s.room_id group by r.id, r.name, r.seats')
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])
@@ -50,7 +50,7 @@ class Room extends Model {
     async find(id) {
         try {
             await this.connect()
-            const sql = 'DELETE FROM room WHERE id = ?'
+            const sql = 'SELECT * FROM room WHERE id = ?'
             const [result, field] = await this.connection.execute(sql, [id])
             return [result[0], field]
         } catch (err) {

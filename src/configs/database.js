@@ -9,7 +9,7 @@ const connect = async () => {
         database: process.env.DB_NAME,
         waitForConnections: true,
         connectionLimit: 10,
-        dateStrings: ['TIMESTAMP']
+        dateStrings: ['TIMESTAMP', 'DATE']
     })
     return connection
 }
