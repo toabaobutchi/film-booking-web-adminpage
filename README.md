@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 	`id` int AUTO_INCREMENT,
 	`username` text NOT NULL ,
 	`password` varchar(30) NOT NULL ,
-	`email` varbinary(100) NOT NULL ,
+	`email` varchar(100) NOT NULL ,
 	`role_id` int NOT NULL ,
 	PRIMARY KEY (`id`)
 );
