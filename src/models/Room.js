@@ -7,7 +7,7 @@ class Room extends Model {
     async getRooms() {
         try {
             await this.connect()
-            return this.connection.query('select r.id, r.name, r.seats, count(s.id) as showtime_count from room r left join showtime s on  r.id = s.room_id group by r.id, r.name, r.seats')
+            return this.connection.query('select r.id, r.name, r.seats, count(s.id) as showtime_count from room r left join showtime s on  r.id = s.room_id group by r.id')
         } catch (err) {
             console.log(err)
             return Promise.resolve([null, null])

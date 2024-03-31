@@ -17,7 +17,7 @@ class ShowTime extends Model {
     async getBriefShowtimesForRoom(roomId) {
         try {
             await this.connect()
-            const sql = `select date(s.time) as showtime_date, group_concat(distinct '{ "showtime_id": ', s.id,', "showtime_time": "', substring(time(s.time), 1, 5), '" }' separator ';') as showtime from room r join showtime s on r.id = s.room_id where r.id = ? group by date(s.time)`
+            const sql = `select s.room_id, date(s.time) as showtime_date, group_concat(distinct '{ "showtime_id": ', s.id,', "showtime_time": "', substring(time(s.time), 1, 5), '" }' separator ';') as showtime from room r join showtime s on r.id = s.room_id where r.id = ? group by date(s.time), s.room_id`
             return this.connection.execute(sql, [roomId])
         } catch (err) {
             console.log(err)
@@ -36,6 +36,7 @@ class ShowTime extends Model {
     }
     async addShowtime(roomId, filmId, showTimesInfo = []) {
         try {
+            console.log(roomId, filmId, showTimesInfo)
             await this.connect()
             const sql = 'INSERT showtime(room_id, film_id, time, price) VALUES ?'
             const values = binder.showTimeBinder(roomId, filmId, showTimesInfo)
