@@ -1,5 +1,4 @@
 const express = require('express')
-const multer = require('multer') // for upload file
 const route = require('./routes')
 const {config} = require('./configs/server.config')
 
