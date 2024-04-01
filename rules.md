@@ -77,16 +77,7 @@ function getXuatChieus(date = new Date(), time = 60, initTime = 7) {
 
 Thời gian được lưu trong MySQL khác với thời gian trong JavaScript.
 
-Hàm sau sẽ thực hiện chuyển đổi ngày giờ từ MySQL thành JavaScript để đồng bộ:
-
-```js
-function MySQLtoJSDate(datetime) {
-    var mysqlDate = new Date(datetime)
-    return new Date(mysqlDate.getTime() + mysqlDate.getTimezoneOffset() * 60000)
-}
-```
-
-Hàm sẽ trả về đối tượng `Date` có thời gian đồng bộ như trong MySQL.
+Chỉ định cấu hình `dateStrings: ['TIMESTAMP', 'DATE']` khi kết nối cơ sở dữ liệu. Xem file `database.js`.
 
 ### # Xác định thời gian bắt đầu
 
