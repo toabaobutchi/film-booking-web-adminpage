@@ -1,83 +1,81 @@
 const roomModel = require('../models/Room')
+const ApiError = require('../utils/ApiError')
 
 class Room {
     // GET: /api/v1/admin/rooms
-    async index(req, res) {
+    async index(req, res, next) {
         try {
             const [result] = await roomModel.getRooms()
             if (result === null) {
-                res.status(500).json({ message: 'Database was not connected properly' })
+                return next(new ApiError('Database was not connected properly'))
             } else res.json(result)
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // POST: /api/v1/admin/rooms
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const clientData = req.body
             const [result] = await roomModel.createRoom(clientData)
             if (result === null) {
-                res.status(500).json({ message: 'Database was not connected properly' })
+                return next(new ApiError('Database was not connected properly'))
             } else res.json(result.affectedRows)
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // PUT: /api/v1/admin/rooms/{id}
-    async update(req, res) {
+    async update(req, res, next) {
         try {
             const clientData = req.body
             const id = req.params.id
             if (!id) {
-                res.status(400).json({ message: 'No nesscessary parameters for request' })
+                return next(new ApiError('No nesscessary parameters for request', 400))
             } else {
                 const [result] = await roomModel.updateRoom(id, clientData)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // DELETE: /api/v1/admin/rooms/:id
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
-            else {
+            if (!id) {
+                return next(new ApiError('No nesscessary parameters for request', 400))
+            } else {
                 const [result] = await roomModel.deleteRoom(id)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // GET: /api/v1/admin/rooms/:id
-    async find(req, res) {
+    async find(req, res, next) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
-            else {
+            if (!id) {
+                return next(new ApiError('No nesscessary parameters for request', 400))
+            } else {
                 const [result] = await roomModel.find(id)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result)
             }
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 }

@@ -1,7 +1,9 @@
 const filmModel = require('../models/Film')
+const ApiError = require('../utils/ApiError')
+
 class FilmController {
     // GET: /api/v1/admin/films
-    async index(req, res) {
+    async index(req, res, next) {
         try {
             const query = req.query.q
             let result = null
@@ -13,85 +15,83 @@ class FilmController {
                 result = data
             }
             if (result === null) {
-                res.status(500).json({ message: 'Database was not connected properly' })
+                return next(new ApiError('Database was not connected properly'))
             } else res.json(result)
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // POST: /api/v1/admin/films
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const clientData = req.body
             clientData.poster = req.file.filename
             const [result] = await filmModel.createFilm(clientData)
             if (result === null) {
-                res.status(500).json({ message: 'Database was not connected properly' })
+                return next(new ApiError('Database was not connected properly'))
             } else res.json(result.affectedRows)
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // PUT: /api/v1/admin/films/{id}
-    async update(req, res) {
+    async update(req, res, next) {
         try {
             const clientData = req.body
             const id = req.params.id
             clientData.poster = req.file?.filename ?? ''
             if (!id) {
-                res.status(400).json({ message: 'No nesscessary parameters for request' })
+                
+                return next(new ApiError('Request requires parameters', 400))
             } else {
                 const [result] = await filmModel.updateFilm(id, clientData)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 
     // DELETE: /api/v1/admin/films/:id
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
-            else {
+            if (!id) {
+                
+                return next(new ApiError('Request requires parameters', 400))
+            } else {
                 const [result] = await filmModel.deleteFilm(id)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
-            console.log(err)
-            let message = 'Internal Server Error! Please visit log at server!'
             if (err.code === 'ER_ROW_IS_REFERENCED_2' || err.code === 'ER_ROW_IS_REFERENCED') {
-                message = 'Can not delete because of its constraint'
+                err.message = 'Can not delete because of its constraint'
             }
-            res.status(500).json({ message })
+            next(err)
         }
     }
 
     // GET: /api/v1/admin/films/:id
-    async find(req, res) {
+    async find(req, res, next) {
         try {
             const id = req.params.id
             if (!id) {
-                res.status(400).json({ message: 'No nesscessary parameters for request' })
+                
+                return next(new ApiError('Request requires parameters', 400))
             } else {
                 const [result] = await filmModel.find(id)
                 if (result === null) {
-                    res.status(500).json({ message: 'Database was not connected properly' })
+                    return next(new ApiError('Database was not connected properly'))
                 } else res.json(result)
             }
         } catch (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
+            next(err)
         }
     }
 }

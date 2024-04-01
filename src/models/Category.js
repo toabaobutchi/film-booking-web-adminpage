@@ -42,7 +42,7 @@ class Category extends Model {
             const [result, field] = await this.connection.execute('SELECT * FROM category WHERE id = ?', [id])
             return [result[0], field]
         } catch (err) {
-            return [null, null]
+            return Promise.resolve([null, null])
         }
     }
 }

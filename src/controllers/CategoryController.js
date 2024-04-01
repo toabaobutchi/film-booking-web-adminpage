@@ -1,44 +1,57 @@
 const categoryModel = require('../models/Category')
+const ApiError = require('../utils/ApiError')
 
 class CategoryController {
-    async index(req, res) {
+    async index(req, res, next) {
         try {
             const [result] = await categoryModel.getCategories()
-            res.json(result)
+            if (result === null) {
+                return next(new ApiError('Database was not connected properly'))
+            }
+            else res.json(result)
         } catch (err) {
-            console.log(err)
+            next(err)
         }
     }
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const name = req.body.name
             const [result] = await categoryModel.createCategory(name)
-            res.json(result.affectedRows)
+            if (result === null) {
+                return next(new ApiError('Database was not connected properly'))
+            } else res.json(result.affectedRows)
         } catch (err) {
-            console.log(err)
-            res.status(500)
+            next(err)
         }
     }
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const id = req.params.id
+            if (!id) {
+                return next(new ApiError('No nesscessary parameters for request', 400))
+            }
             const [result] = await categoryModel.deleteCategory(id)
-            res.json(result.affectedRows)
+            if (result === null) {
+                return next(new ApiError('Database was not connected properly'))
+            } else res.json(result.affectedRows)
         } catch (err) {
-            console.log(err)
-            res.status(500)
+            next(err)
         }
     }
     
-    async update(req, res) {
+    async update(req, res, next) {
         try {
             const id = req.params.id
+            if (!id) {
+                return next(new ApiError('No nesscessary parameters for request', 400))
+            }
             const name = req.body.name
             const [result] = await categoryModel.updateCategory(id, name)
-            res.json(result.affectedRows)
+            if (result === null) {
+                return next(new ApiError('Database was not connected properly'))
+            } else res.json(result.affectedRows)
         } catch (err) {
-            console.log(err)
-            res.status(500)
+            next(err)
         }
     }
 }
