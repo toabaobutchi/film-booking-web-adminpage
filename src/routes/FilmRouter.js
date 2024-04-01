@@ -3,7 +3,7 @@ const route = express.Router()
 const filmController = require('../controllers/FilmController')
 const upload = require('../configs/upload')
 
-// GET /api/v1/admin/films
+// GET /api/v1/admin/films?q={film-name}
 route.get('/', filmController.index)
 
 // POST /api/v1/admin/films

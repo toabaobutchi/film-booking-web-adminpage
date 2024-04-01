@@ -6,11 +6,11 @@ class Room {
         try {
             const [result] = await roomModel.getRooms()
             if (result === null) {
-                res.status(500).send('No connection')
+                res.status(500).json({ message: 'Database was not connected properly' })
             } else res.json(result)
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -20,11 +20,11 @@ class Room {
             const clientData = req.body
             const [result] = await roomModel.createRoom(clientData)
             if (result === null) {
-                res.status(500).send('No connection')
-            } else return res.json(result.affectedRows)
+                res.status(500).json({ message: 'Database was not connected properly' })
+            } else res.json(result.affectedRows)
         } catch (err) {
             console.log(err)
-            return res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -34,16 +34,16 @@ class Room {
             const clientData = req.body
             const id = req.params.id
             if (!id) {
-                res.status(400).send('No params')
+                res.status(400).json({ message: 'No nesscessary parameters for request' })
             } else {
                 const [result] = await roomModel.updateRoom(id, clientData)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -51,16 +51,16 @@ class Room {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).send('No params')
+            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
             else {
                 const [result] = await roomModel.deleteRoom(id)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -68,16 +68,16 @@ class Room {
     async find(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).send('No params')
+            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
             else {
                 const [result] = await roomModel.find(id)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 }

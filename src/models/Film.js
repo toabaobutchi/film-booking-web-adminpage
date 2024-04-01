@@ -22,7 +22,7 @@ class Film extends Model {
             await this.connect()
             return this.connection.execute(sql, values)
         } catch (err) {
-            console.log('Error log from >>> models/Film/createFilm >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }
@@ -32,7 +32,7 @@ class Film extends Model {
             await this.connect()
             return this.connection.execute(sql, [id])
         } catch (err) {
-            console.log('Error log from >>> models/Film/deleteFilm >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }
@@ -54,7 +54,7 @@ class Film extends Model {
             }
             return this.connection.execute(sql, values)
         } catch (err) {
-            console.log('Error log from >>> models/Film/updateFilm >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }
@@ -65,18 +65,18 @@ class Film extends Model {
             const [result, field] = await this.connection.execute(sql, [id])
             return [result[0], field]
         } catch (err) {
-            console.log('Error log from >>> models/Film/find >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }
 
     async searchByName(query) {
         try {
-            const sql = 'SELECT * FROM film WHERE name like = ?'
+            const sql = 'SELECT * FROM film WHERE name like ?'
             await this.connect()
             return this.connection.execute(sql, [`%${query}%`])
         } catch (err) {
-            console.log('Error log from >>> models/Film/searchByName >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }

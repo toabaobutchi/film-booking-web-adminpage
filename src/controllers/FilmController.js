@@ -3,7 +3,7 @@ class FilmController {
     // GET: /api/v1/admin/films
     async index(req, res) {
         try {
-            const query = req.query.id
+            const query = req.query.q
             let result = null
             if (!query) {
                 const [data] = await filmModel.getFilms()
