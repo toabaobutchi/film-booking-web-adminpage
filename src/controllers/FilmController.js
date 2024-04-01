@@ -4,18 +4,20 @@ class FilmController {
     async index(req, res) {
         try {
             const query = req.query.id
+            let result = null
             if (!query) {
-                const [result] = await filmModel.getFilms()
-                res.json(result)
+                const [data] = await filmModel.getFilms()
+                result = data
             } else {
-                const [result] = await filmModel.searchByName(query)
-                if (result === null) {
-                    res.status(500).send('No connection')
-                } else res.json(result)
+                const [data] = await filmModel.searchByName(query)
+                result = data
             }
+            if (result === null) {
+                res.status(500).json({ message: 'Database was not connected properly' })
+            } else res.json(result)
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -26,11 +28,11 @@ class FilmController {
             clientData.poster = req.file.filename
             const [result] = await filmModel.createFilm(clientData)
             if (result === null) {
-                res.status(500).send('No connection')
+                res.status(500).json({ message: 'Database was not connected properly' })
             } else res.json(result.affectedRows)
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -41,16 +43,16 @@ class FilmController {
             const id = req.params.id
             clientData.poster = req.file?.filename ?? ''
             if (!id) {
-                res.status(400).send('No params')
+                res.status(400).json({ message: 'No nesscessary parameters for request' })
             } else {
                 const [result] = await filmModel.updateFilm(id, clientData)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 
@@ -58,16 +60,20 @@ class FilmController {
     async delete(req, res) {
         try {
             const id = req.params.id
-            if (!id) res.status(400).send('No params')
+            if (!id) res.status(400).json({ message: 'No nesscessary parameters for request' })
             else {
                 const [result] = await filmModel.deleteFilm(id)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result.affectedRows)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            let message = 'Internal Server Error! Please visit log at server!'
+            if (err.code === 'ER_ROW_IS_REFERENCED_2' || err.code === 'ER_ROW_IS_REFERENCED') {
+                message = 'Can not delete because of its constraint'
+            }
+            res.status(500).json({ message })
         }
     }
 
@@ -76,16 +82,16 @@ class FilmController {
         try {
             const id = req.params.id
             if (!id) {
-                res.status(400).send('No params')
+                res.status(400).json({ message: 'No nesscessary parameters for request' })
             } else {
                 const [result] = await filmModel.find(id)
                 if (result === null) {
-                    res.status(500).send('No connection')
+                    res.status(500).json({ message: 'Database was not connected properly' })
                 } else res.json(result)
             }
         } catch (err) {
             console.log(err)
-            res.status(500)
+            res.status(500).json({ message: 'Internal Server Error! Please visit log at server!' })
         }
     }
 }

@@ -8,9 +8,9 @@ class Film extends Model {
     async getFilms() {
         try {
             await this.connect()
-            return this.connection.query('SELECT * FROM film')
+            return this.connection.query('select f.*, count(s.id) as showtime_count from film f left join showtime s on f.id = s.film_id group by f.id')
         } catch (err) {
-            console.log('Error log from >>> models/Film/getFilms >>>', err)
+            console.log(err)
             return Promise.resolve([null, null])
         }
     }
