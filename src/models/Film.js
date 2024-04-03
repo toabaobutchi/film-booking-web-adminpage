@@ -42,9 +42,9 @@ class Film extends Model {
 
             // có file gửi đến thì cập nhật, ko thì giữ nguyên
             if (data.poster) {
-                sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, poster = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
+                sql = 'UPDATE film SET name = ?, director = ?, launch_date = ?, time = ?, description = ?, poster = ?, finish_date = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
             } else {
-                sql = 'UPDATE film SET name = ?, director = ?, launchdate = ?, time = ?, description = ?, finishtime = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
+                sql = 'UPDATE film SET name = ?, director = ?, launch_date = ?, time = ?, description = ?, finish_date = ?, actors = ?, rated = ?, categoryid = ? WHERE id = ?'
             }
             await this.connect()
             let values = binder.filmBinder(data)
