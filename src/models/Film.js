@@ -17,7 +17,7 @@ class Film extends Model {
 
     async createFilm(filmData) {
         try {
-            const sql = 'INSERT INTO film(name, director, launchdate, time, description, poster, finishtime, actors, rated, categoryid) VALUES(?,?,?,?,?,?,?,?,?,?)'
+            const sql = 'INSERT INTO film(name, director, launch_date, time, description, poster, finish_date, actors, rated, category_id) VALUES(?,?,?,?,?,?,?,?,?,?)'
             const values = binder.filmBinder(filmData)
             await this.connect()
             return this.connection.execute(sql, values)

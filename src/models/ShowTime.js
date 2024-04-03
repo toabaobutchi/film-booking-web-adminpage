@@ -38,7 +38,7 @@ class ShowTime extends Model {
         try {
             console.log(roomId, filmId, showTimesInfo)
             await this.connect()
-            const sql = 'INSERT showtime(room_id, film_id, time, price) VALUES ?'
+            const sql = 'INSERT INTO showtime(room_id, film_id, time, price) VALUES ?'
             const values = binder.showTimeBinder(roomId, filmId, showTimesInfo)
             return this.connection.query(sql, [values], (error, results, fields) => {
                 if (error) {

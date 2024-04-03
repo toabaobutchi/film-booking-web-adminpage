@@ -1,6 +1,6 @@
 function filmBinder(data) {
-    const { name, director, launchdate, time, description, poster, finishtime, actors, rated, categoryid } = data
-    return [name, director, launchdate, time, description, poster, finishtime ? finishtime : null, actors, rated, categoryid]
+    const { name, director, launch_date, time, description, poster, finish_date, actors, rated, category_id } = data
+    return [name, director, launch_date, time, description, poster, finish_date ? finish_date : null, actors, rated, category_id]
 }
 
 function showTimeBinder(roomId, filmId, showTimes = []) {

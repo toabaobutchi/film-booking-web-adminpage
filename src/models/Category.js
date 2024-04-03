@@ -7,7 +7,7 @@ class Category extends Model {
     async getCategories() {
         try {
             await this.connect()
-            return this.connection.query('select c.*, count(f.id) as film_count from category c left join film f on c.id = f.categoryid group by c.id')
+            return this.connection.query('select c.*, count(f.id) as film_count from category c left join film f on c.id = f.category_id group by c.id')
         } catch (err) {
             return Promise.resolve([null, null])
         }
